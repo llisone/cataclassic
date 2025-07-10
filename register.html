@@ -353,7 +353,7 @@
       
       <div class="input-group">
         <i class="fas fa-user input-icon"></i>
-        <input type="text" id="username" placeholder="Имя персонажа" required minlength="3" maxlength="12" />
+        <input type="text" id="username" placeholder="Логин" required minlength="3" maxlength="12" />
       </div>
       
       <div class="input-group">
@@ -385,45 +385,83 @@
   </footer>
 
   <script>
-     document.getElementById('registerForm').addEventListener('submit', function(e) {
+    document.getElementById('registerForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         
         const username = document.getElementById('username').value;
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
         
-        // Проверка данных
-        if (username && email.includes('@') && password.length >= 6) {
-            // Сохраняем данные пользователя
-            const userData = {
-                username: username,
-                email: email,
-                password: password,
-                created: new Date().toLocaleDateString('ru-RU'),
-                lastLogin: new Date().toLocaleString('ru-RU'),
-                bonuses: "0",
-                status: "Активен"
-            };
+        // Скрываем предыдущие сообщения
+        document.getElementById('errorMessage').style.display = 'none';
+        document.getElementById('successMessage').style.display = 'none';
+        
+        // Валидация
+        if (!username || !email.includes('@') || password.length < 6) {
+            showError("Пожалуйста, заполните все поля правильно (пароль от 6 символов)");
+            return;
+        }
+
+        try {
+            // Показываем загрузку
+            const submitBtn = document.querySelector('.btn');
+            const originalBtnText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Регистрация...';
+            submitBtn.disabled = true;
+
+            // Отправляем данные на сервер
+            const response = await fetch('http://localhost/register.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username,
+                    email: email,
+                    password: password
+                })
+            });
+
+            const result = await response.json();
+
+            // Восстанавливаем кнопку
+            submitBtn.innerHTML = originalBtnText;
+            submitBtn.disabled = false;
+
+            if (result.success) {
+                // Сохраняем данные в localStorage (опционально)
+                localStorage.setItem('userData', JSON.stringify({
+                    username: username,
+                    email: email,
+                    created: new Date().toLocaleDateString('ru-RU')
+                }));
+
+                // Показываем успех
+                document.getElementById('successMessage').style.display = 'flex';
+                
+                // Перенаправляем через 1.5 сек
+                setTimeout(() => {
+                    window.location.href = 'lk.index.html';
+                }, 1500);
+            } else {
+                showError(result.message || "Ошибка регистрации");
+            }
+        } catch (error) {
+            console.error('Ошибка:', error);
+            showError("Ошибка соединения с сервером");
             
-            // Сохраняем в localStorage
-            localStorage.setItem('userData', JSON.stringify(userData));
-            localStorage.setItem('userEmail', email);
-            localStorage.setItem('account_created', userData.created);
-            localStorage.setItem('account_bonuses', userData.bonuses);
-            
-            // Показываем сообщение об успехе
-            document.getElementById('errorMessage').style.display = 'none';
-            document.getElementById('successMessage').style.display = 'flex';
-            
-            // Перенаправляем после задержки
-            setTimeout(() => {
-                window.location.href = 'lk.index.html';
-            }, 1500);
-        } else {
-            document.getElementById('errorMessage').style.display = 'flex';
-            document.getElementById('successMessage').style.display = 'none';
+            // Восстанавливаем кнопку
+            const submitBtn = document.querySelector('.btn');
+            submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Зарегистрироваться';
+            submitBtn.disabled = false;
         }
     });
+
+    function showError(message) {
+        const errorElement = document.getElementById('errorMessage');
+        errorElement.querySelector('span').textContent = message;
+        errorElement.style.display = 'flex';
+    }
 
     // Индикатор сложности пароля (оставляем без изменений)
     document.getElementById('password').addEventListener('input', function(e) {
@@ -447,6 +485,6 @@
             strengthMeter.style.background = '#4ecca3';
         }
     });
-  </script>
+</script>
 </body>
 </html>
