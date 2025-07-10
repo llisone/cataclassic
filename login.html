@@ -386,58 +386,82 @@
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       
-      const email = document.getElementById('email').value;
+      const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
       const rememberMe = document.getElementById('remember').checked;
       
-      // Скрываем сообщение об ошибке (если было показано ранее)
+      // Скрываем предыдущие сообщения об ошибках
       document.getElementById('errorMessage').style.display = 'none';
       
-      // Проверяем заполнение полей
+      // Валидация
       if (!email || !password) {
         showError("Пожалуйста, заполните все поля");
         return;
       }
 
       try {
-        // Отправляем данные на сервер для проверки
-        const response = await fetch('login.php', {
+        // Показываем состояние загрузки
+        const submitBtn = document.querySelector('.btn');
+        const originalBtnText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Вход...';
+        submitBtn.disabled = true;
+
+        // Отправляем данные на сервер
+        const response = await fetch('http://localhost/login.php', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Type': 'application/json',
           },
-          body: `email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
+          body: JSON.stringify({
+            email: email,
+            password: password
+          })
         });
 
         const result = await response.json();
 
+        // Восстанавливаем кнопку
+        submitBtn.innerHTML = originalBtnText;
+        submitBtn.disabled = false;
+
         if (result.success) {
-          // Сохраняем информацию о входе (если нужно)
+          // Сохраняем данные авторизации
+          const authData = {
+            username: result.username,
+            email: result.email,
+            lastLogin: new Date().toISOString()
+          };
+          
           if (rememberMe) {
-            localStorage.setItem('userEmail', email);
+            localStorage.setItem('authData', JSON.stringify(authData));
           } else {
-            sessionStorage.setItem('userEmail', email);
+            sessionStorage.setItem('authData', JSON.stringify(authData));
           }
           
           // Перенаправляем в личный кабинет
           window.location.href = 'lk.index.html';
         } else {
-          showError(result.message || "Неверный email или пароль");
+          showError(result.message || "Ошибка авторизации");
         }
       } catch (error) {
         console.error('Ошибка:', error);
-        showError("Произошла ошибка при входе");
+        showError("Ошибка соединения с сервером");
+        
+        // Восстанавливаем кнопку в случае ошибки
+        const submitBtn = document.querySelector('.btn');
+        submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Войти';
+        submitBtn.disabled = false;
       }
     });
 
-    // Функция для показа сообщения об ошибке
+    // Функция показа ошибок
     function showError(message) {
       const errorElement = document.getElementById('errorMessage');
       errorElement.querySelector('span').textContent = message;
       errorElement.style.display = 'flex';
     }
 
-    // Toggle password visibility
+    // Переключение видимости пароля
     document.getElementById('togglePassword').addEventListener('click', function() {
       const passwordInput = document.getElementById('password');
       const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -445,7 +469,14 @@
       this.classList.toggle('fa-eye-slash');
     });
 
-    // УДАЛЕНО: автоматическая проверка входа при загрузке страницы
+    // Автозаполнение при наличии сохраненных данных
+    window.addEventListener('DOMContentLoaded', () => {
+      const authData = JSON.parse(localStorage.getItem('authData') || JSON.parse(sessionStorage.getItem('authData')));
+      if (authData && authData.email) {
+        document.getElementById('email').value = authData.email;
+        document.getElementById('remember').checked = !!localStorage.getItem('authData');
+      }
+    });
   </script>
 </body>
 </html>
