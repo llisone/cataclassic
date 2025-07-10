@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Поддержать проект | Cata Classic</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-light: #818cf8;
+      --secondary: #f59e0b;
+      --dark: #0f172a;
+      --darker: #020617;
+      --light: #f8fafc;
+      --gray: #64748b;
+      --success: #10b981;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--darker);
+      color: var(--light);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+      line-height: 1.6;
+    }
+
+    @supports (font-variation-settings: normal) {
+      body { font-family: 'Inter var', -apple-system, BlinkMacSystemFont, sans-serif; }
+    }
+
+    .container {
+      max-width: 900px;
+      width: 100%;
+      background-color: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 2.5rem;
+      box-shadow: 0 10px 30px rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      margin-top: 1.5rem;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      color: var(--light);
+      margin-bottom: 2rem;
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border-radius: 2px;
+    }
+
+    .donation-info {
+      background: rgba(30, 41, 59, 0.5);
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      border-left: 4px solid var(--secondary);
+      transition: transform 0.3s ease;
+    }
+
+    .donation-info:hover {
+      transform: translateX(5px);
+    }
+
+    .exchange-rate {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(145deg, var(--primary), var(--primary-light));
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1rem 0;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .donation-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin: 2.5rem 0;
+    }
+
+    .donation-option {
+      background: rgba(30, 41, 59, 0.7);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .donation-option::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+    }
+
+    .donation-option:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+      border-color: var(--primary);
+    }
+
+    .donation-amount {
+      font-size: 2rem;
+      color: var(--secondary);
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    .donation-bonuses {
+      color: var(--primary-light);
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+    }
+
+    .bonus-badge {
+      background: rgba(129, 140, 248, 0.2);
+      color: var(--primary-light);
+      padding: 0.25rem 0.75rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+      display: inline-block;
+    }
+
+    .donate-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(145deg, var(--primary), var(--primary-light));
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      margin-top: auto;
+      font-size: 1rem;
+    }
+
+    .donate-btn:hover {
+      transform: scale(1.03);
+      box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+    }
+
+    .donate-btn:active {
+      transform: scale(0.98);
+    }
+
+    .payment-methods {
+      margin-top: 2.5rem;
+      text-align: center;
+    }
+
+    .payment-methods p {
+      margin-bottom: 1rem;
+      color: var(--gray);
+      font-weight: 500;
+    }
+
+    .payment-methods .payment-icons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .payment-methods img {
+      height: 28px;
+      filter: grayscale(100%) brightness(2);
+      opacity: 0.8;
+      transition: all 0.3s ease;
+    }
+
+    .payment-methods img:hover {
+      filter: grayscale(0) brightness(1);
+      opacity: 1;
+      transform: translateY(-2px);
+    }
+
+    .notice {
+      background: rgba(99, 102, 241, 0.15);
+      padding: 1.25rem;
+      border-radius: 8px;
+      margin-top: 2.5rem;
+      border-left: 4px solid var(--primary);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .notice i {
+      color: var(--primary-light);
+      font-size: 1.2rem;
+      margin-top: 0.1rem;
+    }
+
+    .notice p {
+      flex: 1;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 2.5rem;
+      color: var(--secondary);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    .back-link:hover {
+      color: var(--primary-light);
+      text-decoration: none;
+      transform: translateX(-3px);
+    }
+
+    .progress-container {
+      width: 100%;
+      margin: 2rem 0;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--gray);
+    }
+
+    .progress-bar {
+      height: 8px;
+      width: 100%;
+      background-color: rgba(100, 116, 139, 0.2);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border-radius: 4px;
+      width: 65%;
+      transition: width 0.5s ease;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 1.5rem;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .donation-options {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Floating animation for options */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .donation-option:nth-child(1) { animation: float 6s ease-in-out infinite; }
+    .donation-option:nth-child(2) { animation: float 6s ease-in-out infinite 1s; }
+    .donation-option:nth-child(3) { animation: float 6s ease-in-out infinite 2s; }
+    .donation-option:nth-child(4) { animation: float 6s ease-in-out infinite 3s; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Поддержать проект</h1>
+    
+    <div class="donation-info">
+      <p>Ваша поддержка помогает развивать сервер и улучшать игровой процесс для всех участников. Каждое пожертвование приближает нас к новым функциям и улучшениям!</p>
+      <div class="exchange-rate">
+        <i class="fas fa-exchange-alt"></i>
+        Курс: 100₽ = 10 бонусов
+      </div>
+      <p>Бонусы можно обменять на внутриигровые преимущества в нашем магазине.</p>
+    </div>
+
+    <div class="progress-container">
+      <div class="progress-label">
+        <span>Цель месяца: 25,000₽</span>
+        <span>16,250₽ (65%)</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill"></div>
+      </div>
+    </div>
+    
+    <div class="donation-options">
+      <div class="donation-option">
+        <div class="donation-amount">100₽</div>
+        <div class="donation-bonuses">10 бонусов</div>
+        <button class="donate-btn" data-amount="100">
+          <i class="fas fa-heart"></i> Поддержать
+        </button>
+      </div>
+      
+      <div class="donation-option">
+        <div class="donation-amount">300₽</div>
+        <div class="donation-bonuses">35 бонусов</div>
+        <div class="bonus-badge">+5 бонусов</div>
+        <button class="donate-btn" data-amount="300">
+          <i class="fas fa-gem"></i> Поддержать
+        </button>
+      </div>
+      
+      <div class="donation-option">
+        <div class="donation-amount">500₽</div>
+        <div class="donation-bonuses">60 бонусов</div>
+        <div class="bonus-badge">+10 бонусов</div>
+        <button class="donate-btn" data-amount="500">
+          <i class="fas fa-crown"></i> Поддержать
+        </button>
+      </div>
+      
+      <div class="donation-option">
+        <div class="donation-amount">1000₽</div>
+        <div class="donation-bonuses">130 бонусов</div>
+        <div class="bonus-badge">+30 бонусов</div>
+        <button class="donate-btn" data-amount="1000">
+          <i class="fas fa-star"></i> Поддержать
+        </button>
+      </div>
+    </div>
+    
+    <div class="payment-methods">
+      <p>Доступные методы оплаты:</p>
+      <div class="payment-icons">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/YooMoney_logo.svg" alt="ЮMoney">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/QIWI_logo.svg" alt="Qiwi">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal_Logo_Icon_2014.svg" alt="PayPal">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/4/46/Bitcoin.svg" alt="Bitcoin" style="height: 24px;">
+      </div>
+    </div>
+    
+    <div class="notice">
+      <i class="fas fa-info-circle"></i>
+      <p>После оплаты бонусы автоматически зачислятся на ваш игровой аккаунт в течение 5 минут. Если возникли проблемы, свяжитесь с нашей поддержкой.</p>
+    </div>
+    
+    <a href="index.html" class="back-link">
+      <i class="fas fa-arrow-left"></i> Вернуться на главную страницу
+    </a>
+  </div>
+
+  <script>
+    // Анимация прогресс-бара при загрузке страницы
+    document.addEventListener('DOMContentLoaded', () => {
+      const progressFill = document.querySelector('.progress-fill');
+      // Задержка для плавного старта анимации
+      setTimeout(() => {
+        progressFill.style.width = '65%';
+      }, 300);
+      
+      // Обработка кликов по кнопкам "Поддержать"
+      const donateButtons = document.querySelectorAll('.donate-btn');
+      donateButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+          e.preventDefault();
+          
+          // Получаем сумму из data-атрибута
+          const amount = button.getAttribute('data-amount');
+          
+          // Показываем анимацию загрузки
+          button.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Перенаправление...`;
+          
+          // Сохраняем сумму в localStorage для использования на donation.html
+          localStorage.setItem('selectedAmount', amount);
+          
+          // Перенаправляем через 1.5 секунды (для эффекта)
+          setTimeout(() => {
+            window.location.href = 'donation.html';
+          }, 1500);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

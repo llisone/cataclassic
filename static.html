@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Статус сервера | Cata Classic</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #FF4655;
+      --secondary: #0F1923;
+      --accent: #F7B733;
+      --dark: #121212;
+      --gray: #2A2A2A;
+      --light: #ECECEC;
+      --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--dark);
+      background-image: 
+        radial-gradient(circle at 75% 30%, rgba(255, 70, 85, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 25% 70%, rgba(247, 183, 51, 0.1) 0%, transparent 50%);
+      color: var(--light);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    .server-card {
+      width: 100%;
+      max-width: 650px;
+      background: rgba(30, 30, 30, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 50px 40px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+      z-index: 1;
+    }
+
+    .server-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(255, 70, 85, 0.3);
+    }
+
+    .server-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+    }
+
+    .server-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 80% 20%, rgba(255, 70, 85, 0.1) 0%, transparent 50%);
+      z-index: -1;
+    }
+
+    .server-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .server-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 50px;
+      font-weight: 600;
+      margin-bottom: 30px;
+      background: rgba(255, 70, 85, 0.2);
+      color: var(--primary);
+      box-shadow: 0 0 15px rgba(255, 70, 85, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .server-status::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, rgba(255, 70, 85, 0.3), transparent);
+      z-index: -1;
+    }
+
+    .status-indicator {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background-color: var(--primary);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--primary);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+
+    .players-online {
+      font-size: clamp(1.5rem, 5vw, 2rem);
+      margin: 30px 0;
+      font-weight: 700;
+      position: relative;
+      display: inline-block;
+    }
+
+    .players-online::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.4s ease;
+    }
+
+    .players-online:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    .server-info {
+      margin-bottom: 30px;
+      background: rgba(40, 40, 40, 0.5);
+      border-radius: 12px;
+      padding: 5px;
+    }
+
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 18px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .info-item:last-child {
+      border-bottom: none;
+    }
+
+    .info-label {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .info-value {
+      font-weight: 600;
+    }
+
+    .development-notice {
+      background: rgba(255, 70, 85, 0.15);
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 30px;
+      border-left: 4px solid var(--primary);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .development-notice::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, rgba(255, 70, 85, 0.1), transparent);
+      z-index: -1;
+    }
+
+    .development-notice p {
+      position: relative;
+      z-index: 1;
+      font-weight: 500;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 40px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+      padding: 12px 24px;
+      border-radius: 50px;
+      border: 1px solid rgba(247, 183, 51, 0.3);
+    }
+
+    .back-link:hover {
+      color: var(--primary);
+      border-color: rgba(255, 70, 85, 0.3);
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .back-link::before {
+      content: '←';
+    }
+
+    @media (max-width: 768px) {
+      .server-card {
+        padding: 40px 25px;
+      }
+      
+      .info-item {
+        padding: 15px 10px;
+        flex-direction: column;
+        gap: 5px;
+      }
+      
+      .info-label, .info-value {
+        width: 100%;
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="server-card">
+    <h1 class="server-name">Cata Classic</h1>
+    
+    <div class="server-status">
+      <span class="status-indicator"></span>
+      Статус: В разработке
+    </div>
+    
+    <div class="players-online">0 игроков онлайн</div>
+    
+    <div class="server-info">
+      <div class="info-item">
+        <span class="info-label">Версия:</span>
+        <span class="info-value">Cataclysm 4.4.3</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Тип сервера:</span>
+        <span class="info-value">Blizzlike</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Локация:</span>
+        <span class="info-value">Европа</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Планируемое открытие:</span>
+        <span class="info-value">I квартал 2026</span>
+      </div>
+    </div>
+    
+    <div class="development-notice">
+      <p>Сервер находится в активной разработке. Мы работаем над созданием идеального игрового опыта. Следите за обновлениями!</p>
+    </div>
+    
+    <a href="index.html" class="back-link">Вернуться на главную</a>
+  </div>
+</body>
+</html>

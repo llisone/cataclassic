@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ДОНАТ | Получить бонусы</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .donate-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        #bonus-message {
+            margin-top: 20px;
+            padding: 10px;
+            background: #dff0d8;
+            color: #3c763d;
+            border-radius: 5px;
+            display: none;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="donate-container">
+        <h2>ДОНАТ</h2>
+        <p>Введите данные карты, чтобы получить бонусы:</p>
+        
+        <form id="donate-form">
+            <label for="card-number">Номер карты:</label>
+            <input type="text" id="card-number" placeholder="3232 4353 9023 3213" required>
+            
+            <label for="card-expiry">Срок действия (MM/YY):</label>
+            <input type="text" id="card-expiry" placeholder="06/39" required>
+            
+            <label for="card-cvv">CVV:</label>
+            <input type="text" id="card-cvv" placeholder="122" required>
+            
+            <button type="submit">Получить бонусы</button>
+        </form>
+        
+        <div id="bonus-message">
+            ✅ <strong>Успешно!</strong> На ваш аккаунт зачислено 1000 бонусов.
+        </div>
+        <div id="error-message" class="error"></div>
+    </div>
+
+    <script>
+        document.getElementById('donate-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const cardNumber = document.getElementById('card-number').value.replace(/\s/g, '');
+            const cardExpiry = document.getElementById('card-expiry').value;
+            const cardCvv = document.getElementById('card-cvv').value;
+            const errorElement = document.getElementById('error-message');
+            const bonusMessage = document.getElementById('bonus-message');
+            
+            // Очистка предыдущих сообщений
+            errorElement.textContent = '';
+            bonusMessage.style.display = 'none';
+            
+            // Проверка данных (тестовые значения)
+            if (cardNumber !== '3232435390233213') {
+                errorElement.textContent = 'Ошибка: Неверный номер карты.';
+                return;
+            }
+            if (cardExpiry !== '06/39') {
+                errorElement.textContent = 'Ошибка: Неверный срок действия карты.';
+                return;
+            }
+            if (cardCvv !== '122') {
+                errorElement.textContent = 'Ошибка: Неверный CVV.';
+                return;
+            }
+            
+            // Если всё верно — показываем "бонусы"
+            bonusMessage.style.display = 'block';
+            
+            // Можно добавить запрос к бэкенду (в реальном проекте)
+            // fetch('/add-bonuses', { method: 'POST', body: JSON.stringify({ userId: 123 }) });
+            
+            // Очистка формы (опционально)
+            document.getElementById('donate-form').reset();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Новости проекта — Cata Classic</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #FF4655;
+      --secondary: #0F1923;
+      --accent: #F7B733;
+      --dark: #121212;
+      --gray: #2A2A2A;
+      --light: #ECECEC;
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--dark);
+      color: var(--light);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.6;
+    }
+
+    header {
+      width: 100%;
+      padding: 20px 5%;
+      background-color: var(--secondary);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-decoration: none;
+      position: relative;
+    }
+
+    .logo::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.4s ease;
+    }
+
+    .logo:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    nav a {
+      color: var(--light);
+      text-decoration: none;
+      margin-left: 30px;
+      font-weight: 500;
+      font-size: 1.1rem;
+      position: relative;
+      padding: 5px 0;
+      transition: var(--transition);
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: var(--transition);
+    }
+
+    nav a:hover {
+      color: var(--primary);
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .main-content {
+      width: 100%;
+      max-width: 1200px;
+      padding: 60px 5%;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .announcement {
+      width: 100%;
+      max-width: 900px;
+      background: linear-gradient(135deg, var(--secondary), #1a2a3a);
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 40px;
+      border-left: 6px solid var(--accent);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .announcement::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 150px;
+      height: 150px;
+      background: url('https://wow.zamimg.com/uploads/blog/images/24905-cataclysm-classic-announced-for-2024.jpg') no-repeat;
+      background-size: contain;
+      opacity: 0.2;
+    }
+
+    .announcement-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: var(--accent);
+      margin-bottom: 15px;
+    }
+
+    .announcement-text {
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 15px;
+    }
+
+    .release-date {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 8px 16px;
+      background-color: rgba(247, 183, 51, 0.2);
+      color: var(--accent);
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .news-container {
+      width: 100%;
+      max-width: 900px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+
+    .news-item {
+      background: var(--secondary);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      transition: var(--transition);
+      position: relative;
+      cursor: pointer;
+    }
+
+    .news-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(255, 70, 85, 0.2);
+    }
+
+    .news-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--primary), var(--accent));
+    }
+
+    .news-content {
+      padding: 30px;
+      position: relative;
+    }
+
+    .news-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: white;
+      line-height: 1.3;
+    }
+
+    .news-date {
+      display: inline-block;
+      font-size: 0.9rem;
+      color: var(--primary);
+      margin-bottom: 20px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .news-text {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 20px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .news-item.expanded .news-text {
+      -webkit-line-clamp: unset;
+    }
+
+    .read-more {
+      color: var(--accent);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      transition: var(--transition);
+    }
+
+    .read-more svg {
+      margin-left: 5px;
+      transition: var(--transition);
+    }
+
+    .news-item.expanded .read-more svg {
+      transform: rotate(180deg);
+    }
+
+    .back-btn {
+      margin-top: 60px;
+      align-self: center;
+    }
+
+    .btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 36px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: white;
+      background: transparent;
+      border: 2px solid var(--primary);
+      border-radius: 50px;
+      cursor: pointer;
+      overflow: hidden;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: var(--transition);
+      text-decoration: none;
+      z-index: 1;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
+      background: linear-gradient(to right, var(--primary), var(--accent));
+      transition: var(--transition);
+      z-index: -1;
+    }
+
+    .btn:hover {
+      color: white;
+      border-color: transparent;
+    }
+
+    .btn:hover::before {
+      width: 100%;
+    }
+
+    footer {
+      width: 100%;
+      padding: 30px 5%;
+      background-color: var(--secondary);
+      text-align: center;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: auto;
+    }
+
+    .new-features {
+      width: 100%;
+      max-width: 900px;
+      background: linear-gradient(135deg, var(--secondary), #1a2a3a);
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 40px;
+      border-left: 6px solid var(--primary);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .new-features-image {
+      width: 100%;
+      max-height: 400px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin: 20px 0;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: 768px) {
+      .top-bar {
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      nav {
+        display: flex;
+        gap: 15px;
+        margin-left: 0;
+      }
+      
+      nav a {
+        margin-left: 0;
+      }
+      
+      .announcement::before {
+        width: 100px;
+        height: 100px;
+      }
+      
+      .announcement-title {
+        font-size: 1.6rem;
+      }
+      
+      .news-content {
+        padding: 25px;
+      }
+      
+      .news-title {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Шапка сайта -->
+  <header>
+    <div class="top-bar">
+      <a href="index.html" class="logo">Cata Classic</a>
+      <nav>
+        <a href="index.html">На главную</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Основной контент -->
+  <main class="main-content">
+    <!-- Анонс -->
+    <div class="announcement">
+      <h2 class="announcement-title">Что вас ждёт в Cataclysm Classic</h2>
+      <p class="announcement-text">Уважаемые игроки, показываем вам, что вас ждёт в мире Азерота Cataclysm Classic! Готовьтесь к перерождённому миру, новым зонам, переработанным классам и эпическим приключениям.</p>
+      <p class="announcement-text">Напоминаем, дата релиза приблизительно:</p>
+      <span class="release-date">Q1 2026 - Q2 2026</span>
+    </div>
+
+    <!-- Новый анонс -->
+    <div class="new-features">
+      <h2 class="announcement-title">Уважаемые Игроки! Знакомьтесь с нововведениями</h2>
+      <p class="announcement-text">Мы рады представить вам основные нововведения, которые появятся в Cataclysm Classic. В этом обновлении мы полностью переработали систему талантов, добавили новые подземелья и рейды, а также внедрили улучшенную систему трансмуграфикации.</p>
+      <p class="announcement-text">Одним из самых значимых изменений станет появление археологии как новой профессии, а также переработанная система полётов в старых континентах.</p>
+      
+      <img src="image/carta.jpg" alt="Нововедения Cataclysm" class="new-features-image">
+      
+      <p class="announcement-text">На изображении выше вы можете увидеть Нововедения, которые появятся в игре.</p>
+      <p class="announcement-text">Следите за дальнейшими обновлениями - мы будем регулярно публиковать новую информацию о предстоящих изменениях.</p>
+    </div>
+
+    <!-- Новости -->
+    <div class="news-container">
+      <!-- Новая новость -->
+      <article class="news-item">
+  <div class="news-content">
+    <span class="news-date">15.07.2025</span>
+    <h3 class="news-title">Бета-тестирование и вакансии</h3>
+    <div class="news-text">
+      <p>Уважаемые игроки, сообщаем Вам что бета-тестирование начнётся очень скоро, потому что работа над сервером разрабатывается не останавливаясь!</p>
+      
+      <img src="image/ticket.jpg" alt="Пример тикета GM" style="max-width: 100%; height: auto; margin: 15px 0; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+      
+      <p>Обо всех проблемах или проблемах с заданиями, мы прикрепим скриншот, как написать запрос GM (Game Master).</p>
+      <p style="margin-top: 15px;">Также в скором времени у нас будут открыты вакансии: разработчиков, GM (Game Master), модераторов.</p>
+      <p style="margin-top: 15px;">Спасибо за внимание и активное участие в развитии нашего проекта!</p>
+    </div>
+    <div class="read-more">
+      Подробнее
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </div>
+  </div>
+</article>
+
+      <article class="news-item">
+        <div class="news-content">
+          <span class="news-date">07.07.2025</span>
+          <h3 class="news-title">Статус проекта</h3>
+          <div class="news-text">
+            <p>Уважаемые пользователи, сейчас сайт и сама игра находятся на стадии активной разработки. Наша команда усердно работает над созданием уникального игрового опыта, который превзойдет все ваши ожидания.</p>
+            <p style="margin-top: 15px;">В ближайшее время мы планируем поделиться первыми скриншотами и деталями геймплея. Следите за обновлениями — мы обязательно сообщим вам, как только у нас появятся новости!</p>
+            <p style="margin-top: 15px;">На данный момент завершены основные работы по бэкенду, и мы переходим к созданию пользовательского интерфейса и тестированию ключевых механик.</p>
+          </div>
+          <div class="read-more">
+            Подробнее
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+        </div>
+      </article>
+
+      <article class="news-item">
+        <div class="news-content">
+          <span class="news-date">01.07.2025</span>
+          <h3 class="news-title">Новые зоны и континенты</h3>
+          <div class="news-text">
+            <p>Cataclysm принесёт радикальные изменения в мир Азерота. В этом обновлении мы расскажем о новых зонах, которые появятся в игре.</p>
+            <p style="margin-top: 15px;">Глубины Вайш'ира, Ульдум, Твилит Хайлендс — эти локации полностью переработаны и ждут своих исследователей. Каждая зона получила уникальные квестовые цепочки и динамические события.</p>
+            <p style="margin-top: 15px;">Особое внимание уделено подводному царству Вайш'ира - здесь реализована совершенно новая механика передвижения и боя под водой.</p>
+          </div>
+          <div class="read-more">
+            Подробнее
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+        </div>
+      </article>
+
+      <article class="news-item">
+        <div class="news-content">
+          <span class="news-date">20.06.2025</span>
+          <h3 class="news-title">Изменения в классах</h3>
+          <div class="news-text">
+            <p>В Cataclysm Classic все классы получат значительные изменения. Мы стремимся сохранить аутентичность оригинального Cataclysm, но с современными улучшениями.</p>
+            <p style="margin-top: 15px;">Новые таланты, переработанные способности и улучшенный баланс — всё это ждёт игроков в новом релизе. Особое внимание уделено хиллерам и танкам, чтобы сделать их геймплей более увлекательным.</p>
+            <p style="margin-top: 15px;">Система талантов полностью переработана - теперь вы будете делать выбор на каждом уровне, а не раз в несколько уровней. Это добавит больше гибкости в развитии персонажа.</p>
+          </div>
+          <div class="read-more">
+            Подробнее
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- Кнопка "Вернуться на главную" -->
+    <div class="back-btn">
+      <a href="index.html" class="btn"><span>Вернуться на главную</span></a>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2025 Cata Classic. Все права защищены.
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const newsItems = document.querySelectorAll('.news-item');
+      
+      newsItems.forEach(item => {
+        const readMore = item.querySelector('.read-more');
+        const newsText = item.querySelector('.news-text');
+        
+        readMore.addEventListener('click', function(e) {
+          e.stopPropagation();
+          item.classList.toggle('expanded');
+          readMore.textContent = item.classList.contains('expanded') ? 'Свернуть' : 'Подробнее';
+        });
+        
+        item.addEventListener('click', function(e) {
+          if (e.target === item || e.target === newsText) {
+            item.classList.toggle('expanded');
+            readMore.textContent = item.classList.contains('expanded') ? 'Свернуть' : 'Подробнее';
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Как начать играть | Cata Classic</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #FF4655;
+      --secondary: #0F1923;
+      --accent: #F7B733;
+      --dark: #121212;
+      --gray: #2A2A2A;
+      --light: #ECECEC;
+      --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--dark);
+      background-image: 
+        radial-gradient(circle at 75% 30%, rgba(255, 70, 85, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 25% 70%, rgba(247, 183, 51, 0.1) 0%, transparent 50%);
+      color: var(--light);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0;
+      line-height: 1.6;
+    }
+
+    .hero {
+      width: 100%;
+      background: linear-gradient(135deg, var(--secondary), rgba(15, 25, 35, 0.9));
+      padding: 60px 5% 40px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.8);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      padding: 40px 5%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .step {
+      background: rgba(30, 30, 30, 0.7);
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .step:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(255, 70, 85, 0.2);
+    }
+
+    .step::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--primary), var(--accent));
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      gap: 15px;
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      color: white;
+      font-weight: 600;
+    }
+
+    .step-content {
+      padding-left: 55px;
+    }
+
+    .step-content p {
+      margin-bottom: 15px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 32px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: white;
+      background: transparent;
+      border: 2px solid var(--primary);
+      border-radius: 50px;
+      cursor: pointer;
+      overflow: hidden;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: var(--transition);
+      text-decoration: none;
+      margin-top: 10px;
+      z-index: 1;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
+      background: linear-gradient(to right, var(--primary), var(--accent));
+      transition: var(--transition);
+      z-index: -1;
+    }
+
+    .btn:hover {
+      color: white;
+      border-color: transparent;
+    }
+
+    .btn:hover::before {
+      width: 100%;
+    }
+
+    .notice {
+      background: rgba(255, 70, 85, 0.15);
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 30px;
+      border-left: 4px solid var(--primary);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .notice::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, rgba(255, 70, 85, 0.1), transparent);
+      z-index: 0;
+    }
+
+    .notice p {
+      position: relative;
+      z-index: 1;
+      font-weight: 500;
+      color: white;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 40px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .back-link:hover {
+      color: var(--primary);
+      gap: 12px;
+    }
+
+    .back-link::before {
+      content: '←';
+    }
+
+    footer {
+      width: 100%;
+      padding: 30px 5%;
+      background-color: var(--secondary);
+      text-align: center;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: auto;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 30px 20px;
+      }
+      
+      .step {
+        padding: 20px;
+      }
+      
+      .step-content {
+        padding-left: 0;
+      }
+      
+      .step-header {
+        margin-bottom: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <h1>Как начать играть на Cata Classic</h1>
+    <p class="subtitle">Простое руководство для новых игроков</p>
+  </section>
+
+  <main class="container">
+    <article class="step">
+      <div class="step-header">
+        <div class="step-number">1</div>
+        <h2>Регистрация учетной записи</h2>
+      </div>
+      <div class="step-content">
+        <p>Для начала игры вам необходимо зарегистрировать учетную запись на нашем проекте. Это займет всего несколько минут.</p>
+        <a href="register.html" class="btn">Зарегистрироваться</a>
+      </div>
+    </article>
+    
+    <article class="step">
+      <div class="step-header">
+        <div class="step-number">2</div>
+        <h2>Загрузка игрового клиента</h2>
+      </div>
+      <div class="step-content">
+        <p>После регистрации вам потребуется специальный игровой клиент для подключения к нашему серверу.</p>
+        <p>Мы подготовили подробные инструкции по установке и настройке клиента для всех операционных систем.</p>
+      </div>
+    </article>
+    
+    <article class="step">
+      <div class="step-header">
+        <div class="step-number">3</div>
+        <h2>Вход в игру</h2>
+      </div>
+      <div class="step-content">
+        <p>После успешной установки клиента используйте ваши учетные данные для входа в игру и присоединяйтесь к нашему сообществу!</p>
+        <p>При возникновении любых проблем - наша служба поддержки всегда готова помочь.</p>
+      </div>
+    </article>
+    
+    <div class="notice">
+      <p>Сервер находится на стадии активной разработки! Мы уведомим вас сразу, как только он будет готов к запуску.</p>
+    </div>
+    
+    <a href="index.html" class="back-link">Вернуться на главную страницу</a>
+  </main>
+
+  <footer>
+    &copy; 2025 Cata Classic. Все права защищены.
+  </footer>
+</body>
+</html>

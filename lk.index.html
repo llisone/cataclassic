@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Личный кабинет | Cata Classic</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #6c5ce7;
+      --primary-dark: #5649c0;
+      --secondary: #fd79a8;
+      --dark: #2d3436;
+      --light: #f5f6fa;
+      --success: #00b894;
+      --warning: #fdcb6e;
+      --danger: #d63031;
+      --card-bg: rgba(255, 255, 255, 0.1);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      color: var(--light);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      padding: 2rem 1rem;
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      z-index: 10;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      padding: 0 1rem;
+    }
+
+    .logo img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+
+    .logo h2 {
+      font-size: 1.2rem;
+      background: linear-gradient(to right, #6c5ce7, #fd79a8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-menu {
+      list-style: none;
+      margin-top: 2rem;
+    }
+
+    .nav-item {
+      margin-bottom: 0.5rem;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      color: var(--light);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .nav-link:hover, .nav-link.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .nav-link i {
+      width: 20px;
+      text-align: center;
+    }
+
+    /* Main Content */
+    .main-content {
+      padding: 2rem;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 30px;
+      padding: 0.5rem 1rem;
+      width: 300px;
+    }
+
+    .search-bar input {
+      background: transparent;
+      border: none;
+      color: white;
+      padding: 0.5rem;
+      width: 100%;
+      outline: none;
+    }
+
+    .search-bar i {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--primary);
+    }
+
+    .notification-bell {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: var(--danger);
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+    }
+
+    /* Cards */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 15px;
+      padding: 1.5rem;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .card-icon.blue {
+      background: rgba(108, 92, 231, 0.2);
+      color: var(--primary);
+    }
+
+    .card-icon.pink {
+      background: rgba(253, 121, 168, 0.2);
+      color: var(--secondary);
+    }
+
+    .card-icon.green {
+      background: rgba(0, 184, 148, 0.2);
+      color: var(--success);
+    }
+
+    .card-icon.yellow {
+      background: rgba(253, 203, 110, 0.2);
+      color: var(--warning);
+    }
+
+    .card-value {
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-title {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+    }
+
+    /* Tab Content */
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Profile Cards */
+    .profile-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    
+    .profile-card {
+      background: var(--card-bg);
+      border-radius: 15px;
+      padding: 1.5rem;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .profile-card-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .profile-card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+      background: rgba(108, 92, 231, 0.2);
+      color: var(--primary);
+    }
+    
+    .profile-card-title {
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+    
+    .profile-card-value {
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin: 0.5rem 0;
+    }
+    
+    .profile-card-label {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+    }
+    
+    .account-actions {
+      margin-top: 2rem;
+    }
+    
+    .account-btn {
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-right: 1rem;
+    }
+    
+    .account-btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .account-btn-primary:hover {
+      background: var(--primary-dark);
+    }
+    
+    .account-btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+    
+    .account-btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: var(--card-bg);
+      border-radius: 15px;
+      width: 90%;
+      max-width: 500px;
+      padding: 2rem;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      animation: modalOpen 0.4s ease;
+    }
+
+    @keyframes modalOpen {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .modal-body {
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-item-img {
+      width: 100%;
+      max-height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+    }
+
+    .modal-item-price {
+      color: var(--warning);
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin: 1rem 0;
+    }
+
+    .modal-item-desc {
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .modal-btn {
+      flex: 1;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .modal-btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .modal-btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .modal-btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .modal-btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Главная разметка -->
+  <div class="dashboard">
+
+    <!-- Боковая панель -->
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="image/photo.webp" alt="Logo">
+        <h2>Cata Classic</h2>
+      </div>
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="#" class="nav-link active" data-tab="dashboard">
+            <i class="fas fa-home"></i><span>Главная</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" data-tab="profile">
+            <i class="fas fa-user"></i><span>Профиль</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" data-tab="characters">
+            <i class="fas fa-gamepad"></i><span>Персонажи</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" data-tab="shop">
+            <i class="fas fa-coins"></i><span>Магазин</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" data-action="achievements">
+            <i class="fas fa-trophy"></i><span>Достижения</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" data-action="settings">
+            <i class="fas fa-cog"></i><span>Настройки</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" data-action="logout">
+            <i class="fas fa-sign-out-alt"></i><span>Выйти</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Основной контент -->
+    <main class="main-content">
+      <div class="header">
+        <div class="search-bar">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Поиск...">
+        </div>
+        <div class="user-profile">
+          <div class="notification-bell">
+            <i class="fas fa-bell"></i>
+            <span class="notification-badge">3</span>
+          </div>
+          <img src="image/chap.jpg" alt="User" class="user-avatar">
+        </div>
+      </div>
+
+      <!-- Табы: Главная, Профиль, Персонажи, Магазин -->
+      <div id="dashboard" class="tab-content active">
+        <h2 style="margin-bottom: 1.5rem;">Главная</h2>
+        <p>Здесь будет информация о вашем аккаунте.</p>
+      </div>
+
+      <div id="profile" class="tab-content">
+        <h2 style="margin-bottom: 1.5rem;">Профиль</h2>
+        
+        <div class="profile-grid">
+          <!-- Карточка с email -->
+          <div class="profile-card">
+            <div class="profile-card-header">
+              <div class="profile-card-icon">
+                <i class="fas fa-envelope"></i>
+              </div>
+              <div class="profile-card-title">Email</div>
+            </div>
+            <div class="profile-card-value" id="user-email">user@example.com</div>
+            <div class="profile-card-label">Основной email аккаунта</div>
+          </div>
+          
+          <!-- Карточка с IP-адресом -->
+          <div class="profile-card">
+            <div class="profile-card-header">
+              <div class="profile-card-icon">
+                <i class="fas fa-network-wired"></i>
+              </div>
+              <div class="profile-card-title">IP-адрес</div>
+            </div>
+            <div class="profile-card-value" id="user-ip">192.168.1.1</div>
+            <div class="profile-card-label">Текущий IP-адрес</div>
+          </div>
+          
+          <!-- Карточка с датой создания -->
+          <div class="profile-card">
+            <div class="profile-card-header">
+              <div class="profile-card-icon">
+                <i class="fas fa-calendar-plus"></i>
+              </div>
+              <div class="profile-card-title">Дата создания</div>
+            </div>
+            <div class="profile-card-value" id="account-created">01.01.2023</div>
+            <div class="profile-card-label">Когда создан аккаунт</div>
+          </div>
+          
+          <!-- Карточка с последним входом -->
+          <div class="profile-card">
+            <div class="profile-card-header">
+              <div class="profile-card-icon">
+                <i class="fas fa-sign-in-alt"></i>
+              </div>
+              <div class="profile-card-title">Последний вход</div>
+            </div>
+            <div class="profile-card-value" id="last-login">Сегодня, 15:30</div>
+            <div class="profile-card-label">Время последнего входа</div>
+          </div>
+          
+          <!-- Карточка с бонусами -->
+          <div class="profile-card">
+            <div class="profile-card-header">
+              <div class="profile-card-icon">
+                <i class="fas fa-coins"></i>
+              </div>
+              <div class="profile-card-title">Бонусы</div>
+            </div>
+            <div class="profile-card-value" id="account-bonuses">1,250</div>
+            <div class="profile-card-label">Доступно для покупок</div>
+          </div>
+          
+          <!-- Карточка с статусом аккаунта -->
+          <div class="profile-card">
+            <div class="profile-card-header">
+              <div class="profile-card-icon">
+                <i class="fas fa-shield-alt"></i>
+              </div>
+              <div class="profile-card-title">Статус аккаунта</div>
+            </div>
+            <div class="profile-card-value" id="account-status">Активен</div>
+            <div class="profile-card-label">Статус вашего аккаунта</div>
+          </div>
+        </div>
+        
+        <div class="account-actions">
+          <button class="account-btn account-btn-primary">
+            <i class="fas fa-key"></i> Сменить пароль
+          </button>
+          <button class="account-btn account-btn-secondary">
+            <i class="fas fa-envelope"></i> Изменить email
+          </button>
+        </div>
+      </div>
+
+      <div id="characters" class="tab-content">
+        <h2 style="margin-bottom: 1.5rem;">Персонажи</h2>
+        <p>Список ваших персонажей.</p>
+      </div>
+
+      <div id="shop" class="tab-content">
+        <h2 style="margin-bottom: 1.5rem;">Магазин</h2>
+        
+        <div class="cards-grid">
+          <!-- Товар 1: Непобедимый -->
+          <div class="card shop-item" data-item="invincible">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Скакун</div>
+                <div class="card-value">Непобедимый</div>
+              </div>
+              <div class="card-icon blue">
+                <i class="fas fa-horse"></i>
+              </div>
+            </div>
+            <p style="margin-bottom: 1rem; color: rgba(255,255,255,0.7); font-size: 0.9rem;">
+              Легендарный скакун Короля-лича. Эффект: позволяет летать в Северных пустошах.
+            </p>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="color: var(--warning); font-weight: bold;">349 бонусов</span>
+              <button class="shop-item-btn" style="background: var(--primary); color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer;">
+                Купить
+              </button>
+            </div>
+          </div>
+          
+          <!-- Товар 2: Повышение уровня -->
+          <div class="card shop-item" data-item="level85">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Услуга</div>
+                <div class="card-value">Буст до 85 уровня</div>
+              </div>
+              <div class="card-icon green">
+                <i class="fas fa-level-up-alt"></i>
+              </div>
+            </div>
+            <p style="margin-bottom: 1rem; color: rgba(255,255,255,0.7); font-size: 0.9rem;">
+              Мгновенно повышает уровень выбранного персонажа до 85 с экипировкой.
+            </p>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="color: var(--warning); font-weight: bold;">490 бонусов</span>
+              <button class="shop-item-btn" style="background: var(--primary); color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer;">
+                Купить
+              </button>
+            </div>
+          </div>
+          
+          <!-- Товар 3: Нити фельдмаршала -->
+          <div class="card shop-item" data-item="threads">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Трансмог</div>
+                <div class="card-value">Нити фельдмаршала</div>
+              </div>
+              <div class="card-icon yellow">
+                <i class="fas fa-tshirt"></i>
+              </div>
+            </div>
+            <p style="margin-bottom: 1rem; color: rgba(255,255,255,0.7); font-size: 0.9rem;">
+              Эксклюзивный комплект трансмогрификации для облачения в доспехи полководцев.
+            </p>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="color: var(--warning); font-weight: bold;">249 бонусов</span>
+              <button class="shop-item-btn" style="background: var(--primary); color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer;">
+                Купить
+              </button>
+            </div>
+          </div>
+          
+          <!-- Товар 4: Комплект наследуемых вещей -->
+          <div class="card shop-item" data-item="mage-set">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Комплект</div>
+                <div class="card-value">Наследуемые вещи: Маг</div>
+              </div>
+              <div class="card-icon pink">
+                <i class="fas fa-hat-wizard"></i>
+              </div>
+            </div>
+            <p style="margin-bottom: 1rem; color: rgba(255,255,255,0.7); font-size: 0.9rem;">
+              Полный комплект наследуемых вещей для класса Маг с уникальными эффектами.
+            </p>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="color: var(--warning); font-weight: bold;">349 бонусов</span>
+              <button class="shop-item-btn" style="background: var(--primary); color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer;">
+                Купить
+              </button>
+            </div>
+          </div>
+          
+          <!-- Товар 5: Смена расы -->
+          <div class="card shop-item" data-item="race-change">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Услуга</div>
+                <div class="card-value">Смена расы</div>
+              </div>
+              <div class="card-icon blue">
+                <i class="fas fa-exchange-alt"></i>
+              </div>
+            </div>
+            <p style="margin-bottom: 1rem; color: rgba(255,255,255,0.7); font-size: 0.9rem;">
+              Позволяет изменить расу выбранного персонажа, сохраняя уровень и прогресс.
+            </p>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="color: var(--warning); font-weight: bold;">39 бонусов</span>
+              <button class="shop-item-btn" style="background: var(--primary); color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer;">
+                Купить
+              </button>
+            </div>
+          </div>
+          
+          <!-- Товар 6: Игровая валюта -->
+          <div class="card shop-item" data-item="game-currency">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Валюта</div>
+                <div class="card-value">10,000 золота</div>
+              </div>
+              <div class="card-icon yellow">
+                <i class="fas fa-coins"></i>
+              </div>
+            </div>
+            <p style="margin-bottom: 1rem; color: rgba(255,255,255,0.7); font-size: 0.9rem;">
+              Игровая валюта для покупки предметов и услуг у других игроков.
+            </p>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="color: var(--warning); font-weight: bold;">99 бонусов</span>
+              <button class="shop-item-btn" style="background: var(--primary); color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer;">
+                Купить
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+  </div>
+
+  <!-- Модальное окно покупки -->
+  <div class="modal" id="purchaseModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Подтверждение покупки</h3>
+        <button class="close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <img id="modalItemImage" src="" alt="Товар" class="modal-item-img">
+        <h4 id="modalItemTitle"></h4>
+        <div id="modalItemPrice" class="modal-item-price"></div>
+        <p id="modalItemDesc" class="modal-item-desc"></p>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn-primary" id="confirmPurchase">Подтвердить</button>
+        <button class="modal-btn modal-btn-secondary" id="cancelPurchase">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Переключение табов
+    const navLinks = document.querySelectorAll('.nav-link[data-tab]');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    navLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        navLinks.forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
+        tabContents.forEach(tab => tab.classList.remove('active'));
+        const tabId = this.getAttribute('data-tab');
+        document.getElementById(tabId).classList.add('active');
+      });
+    });
+
+    // Обработка кликов по кнопкам с data-action
+    document.querySelectorAll('.nav-link[data-action]').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const action = this.getAttribute('data-action');
+
+        switch (action) {
+          case 'achievements':
+            window.location.href = 'achievements.html';
+            break;
+          case 'settings':
+            window.location.href = 'settings.html';
+            break;
+          case 'logout':
+            if (confirm('Вы уверены, что хотите выйти?')) {
+              localStorage.removeItem('auth_token');
+              window.location.href = 'login.html';
+            }
+            break;
+        }
+      });
+    });
+
+    // Получение данных пользователя
+    document.addEventListener('DOMContentLoaded', function() {
+        // Получаем IP-адрес пользователя
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('user-ip').textContent = data.ip;
+            })
+            .catch(() => {
+                document.getElementById('user-ip').textContent = 'Не определен';
+            });
+
+        // Получаем сохраненные данные пользователя
+        const savedUserData = localStorage.getItem('userData');
+        let userData;
+        
+        if (savedUserData) {
+            userData = JSON.parse(savedUserData);
+        } else {
+            // Данные по умолчанию, если ничего не найдено
+            userData = {
+                email: localStorage.getItem('user_email') || 'player123@example.com',
+                created: localStorage.getItem('account_created') || '15.05.2023',
+                lastLogin: new Date().toLocaleString('ru-RU', {
+                    day: 'numeric',
+                    month: 'numeric',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                }),
+                bonuses: localStorage.getItem('account_bonuses') || '0',
+                status: 'Активен'
+            };
+        }
+
+        // Заполняем данные профиля
+        document.getElementById('user-email').textContent = userData.email;
+        document.getElementById('account-created').textContent = userData.created;
+        document.getElementById('last-login').textContent = userData.lastLogin;
+        document.getElementById('account-bonuses').textContent = userData.bonuses;
+        document.getElementById('account-status').textContent = userData.status;
+
+        // Сохраняем время последнего входа
+        localStorage.setItem('last_login', userData.lastLogin);
+    });
+
+    // Shop items modal
+    const shopItems = document.querySelectorAll('.shop-item');
+    const purchaseModal = document.getElementById('purchaseModal');
+    const closeModal = document.querySelector('.close-modal');
+    const cancelPurchase = document.getElementById('cancelPurchase');
+
+    // Item data
+    const items = {
+      invincible: {
+        title: 'Непобедимый',
+        price: '349 бонусов',
+        desc: 'Легендарный скакун Короля-лича. Эффект: позволяет летать в Северных пустошах. Уникальная анимация взлета/посадки.',
+        img: 'image/непобедимый.png'
+      },
+      level85: {
+        title: 'Повышение уровня до 85-ого',
+        price: '490 бонусов',
+        desc: 'Мгновенно повышает уровень выбранного персонажа до 85. Включает: стандартный набор умений, экипировку начального уровня, 4x16-слотовых сумок.',
+        img: 'image/буст.jpg'
+      },
+      threads: {
+        title: 'Нити фельдмаршала',
+        price: '249 бонусов',
+        desc: 'Эксклюзивный комплект трансмогрификации для облачения в доспехи легендарных полководцев. Доступен для всех классов, использующих данный тип брони.',
+        img: 'image/trans.webp'
+      },
+      'mage-set': {
+        title: 'Комплект наследуемых вещей: Маг',
+        price: '349 бонусов',
+        desc: 'Полный комплект наследуемых вещей для класса Маг. Уровень предметов: 85. Особенность: изменяет визуальные эффекты ваших заклинаний.',
+        img: 'image/комплектмаг.png'
+      },
+      'race-change': {
+        title: 'Сменить расу',
+        price: '39 бонусов',
+        desc: 'Позволяет изменить расу выбранного персонажа, сохраняя его уровень, профессии и репутации. Недоступно для некоторых комбинаций рас/классов.',
+        img: 'сменарасы.jpg'
+      },
+      'game-currency': {
+        title: 'Игровая валюта',
+        price: '99 бонусов',
+        desc: '10,000 золота для покупки предметов и услуг у других игроков.',
+        img: 'image/gold.jpg'
+      }
+    };
+
+    // Open modal when clicking buy button
+    shopItems.forEach(item => {
+      const buyBtn = item.querySelector('.shop-item-btn');
+      const itemId = item.getAttribute('data-item');
+      buyBtn.addEventListener('click', () => {
+        const itemData = items[itemId];
+        document.getElementById('modalItemTitle').textContent = itemData.title;
+        document.getElementById('modalItemPrice').textContent = itemData.price;
+        document.getElementById('modalItemDesc').textContent = itemData.desc;
+        document.getElementById('modalItemImage').src = itemData.img;
+        purchaseModal.style.display = 'flex';
+      });
+    });
+
+    // Close modal
+    closeModal.addEventListener('click', () => {
+      purchaseModal.style.display = 'none';
+    });
+
+    cancelPurchase.addEventListener('click', () => {
+      purchaseModal.style.display = 'none';
+    });
+
+    // Confirm purchase
+    document.getElementById('confirmPurchase').addEventListener('click', function() {
+      alert('Покупка успешно завершена!');
+      purchaseModal.style.display = 'none';
+    });
+  </script>
+
+</body>
+</html>

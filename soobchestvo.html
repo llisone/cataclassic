@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Сообщество | Cata Classic</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #121212;
+      background-image: radial-gradient(circle at 50% 50%, #1e1e1e 0%, #121212 100%);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 800px;
+      width: 100%;
+      background-color: rgba(30, 30, 30, 0.8);
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 0 20px rgba(255, 70, 85, 0.3);
+      border: 1px solid #333;
+      margin-top: 20px;
+    }
+
+    h1 {
+      color: #ff4655;
+      margin-bottom: 30px;
+      text-align: center;
+      font-size: 2.2rem;
+      background: linear-gradient(90deg, #ff4655, #f7b733);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .social-list {
+      list-style: none;
+      margin: 30px 0;
+    }
+
+    .social-item {
+      margin-bottom: 20px;
+      padding: 20px;
+      background: rgba(40, 40, 40, 0.5);
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      border-left: 4px solid transparent;
+    }
+
+    .social-item:hover {
+      background: rgba(40, 40, 40, 0.8);
+      border-left: 4px solid #ff4655;
+      transform: translateX(5px);
+    }
+
+    .social-title {
+      font-size: 1.5rem;
+      color: #f7b733;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+    }
+
+    .social-icon {
+      margin-right: 15px;
+      font-size: 1.8rem;
+    }
+
+    .social-link {
+      color: #ccc;
+      text-decoration: none;
+      transition: color 0.3s ease;
+      display: block;
+      padding: 5px 0;
+    }
+
+    .social-link:hover {
+      color: #ff4655;
+    }
+
+    .coming-soon {
+      color: #888;
+      font-style: italic;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 30px;
+      color: #f7b733;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .back-link:hover {
+      color: #ff4655;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px 15px;
+      }
+      
+      h1 {
+        font-size: 1.8rem;
+      }
+      
+      .social-title {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Наше сообщество</h1>
+    
+    <ul class="social-list">
+      <li class="social-item">
+        <div class="social-title">
+          <span class="social-icon">📢</span> Discord
+        </div>
+        <a href="#" class="social-link coming-soon">Ссылка появится позже</a>
+      </li>
+      
+      <li class="social-item">
+        <div class="social-title">
+          <span class="social-icon">👥</span> VK
+        </div>
+        <a href="#" class="social-link coming-soon">Ссылка появится позже</a>
+      </li>
+      
+      <li class="social-item">
+        <div class="social-title">
+          <span class="social-icon">📨</span> Telegram
+        </div>
+        <a href="#" class="social-link coming-soon">Ссылка появится позже</a>
+      </li>
+    </ul>
+    
+    <div style="text-align: center; margin-top: 30px; color: #666;">
+      <p>Наши социальные сети будут доступны ближе к запуску сервера</p>
+    </div>
+    
+    <a href="index.html" class="back-link">← Вернуться на главную страницу</a>
+  </div>
+</body>
+</html>
