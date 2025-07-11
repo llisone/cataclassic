@@ -266,10 +266,10 @@
     
     <div class="server-status">
       <span class="status-indicator"></span>
-      Статус: В разработке
+      Статус: <span id="server-status-text">Загрузка...</span>
     </div>
     
-    <div class="players-online">0 игроков онлайн</div>
+    <div class="players-online" id="players-count">0 игроков онлайн</div>
     
     <div class="server-info">
       <div class="info-item">
@@ -288,13 +288,89 @@
         <span class="info-label">Планируемое открытие:</span>
         <span class="info-value">I квартал 2026</span>
       </div>
+      <div class="info-item">
+        <span class="info-label">Макс. онлайн:</span>
+        <span class="info-value" id="max-players">0</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Активных аккаунтов:</span>
+        <span class="info-value" id="total-accounts">0</span>
+      </div>
     </div>
     
     <div class="development-notice">
-      <p>Сервер находится в активной разработке. Мы работаем над созданием идеального игрового опыта. Следите за обновлениями!</p>
+      <p id="server-message">Сервер находится в активной разработке. Мы работаем над созданием идеального игрового опыта. Следите за обновлениями!</p>
     </div>
     
     <a href="index.html" class="back-link">Вернуться на главную</a>
   </div>
+
+  <script>
+    // Функция для обновления статуса сервера
+    async function updateServerStatus() {
+      try {
+        // Добавляем timestamp чтобы избежать кеширования
+        const response = await fetch('api/server-status.php?t=' + Date.now());
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        console.log('Данные от сервера:', data); // Для отладки
+
+        // Обновляем элементы интерфейса
+        updateUI(data);
+        
+      } catch (error) {
+        console.error('Ошибка при обновлении статуса:', error);
+        showError();
+      }
+    }
+
+    function updateUI(data) {
+      const statusElement = document.querySelector('.server-status');
+      const indicator = document.querySelector('.status-indicator');
+      const statusText = document.getElementById('server-status-text');
+      const playersElement = document.getElementById('players-count');
+      const maxPlayersElement = document.getElementById('max-players');
+      const totalAccountsElement = document.getElementById('total-accounts');
+      const serverMessageElement = document.getElementById('server-message');
+
+      if (data.status === 'online') {
+        statusText.textContent = 'Онлайн';
+        statusElement.style.background = 'rgba(0, 255, 100, 0.2)';
+        statusElement.style.color = '#00ff64';
+        indicator.style.backgroundColor = '#00ff64';
+        indicator.style.boxShadow = '0 0 10px #00ff64';
+        
+        playersElement.textContent = `${data.players_online} игроков онлайн`;
+        maxPlayersElement.textContent = data.max_online;
+        totalAccountsElement.textContent = data.total_accounts;
+      } else {
+        statusText.textContent = 'Оффлайн';
+        statusElement.style.background = 'rgba(255, 70, 85, 0.2)';
+        statusElement.style.color = 'var(--primary)';
+        indicator.style.backgroundColor = 'var(--primary)';
+        indicator.style.boxShadow = '0 0 10px var(--primary)';
+        
+        playersElement.textContent = '0 игроков онлайн';
+      }
+      
+      if (data.message) {
+        serverMessageElement.textContent = data.message;
+      }
+    }
+
+    function showError() {
+      document.getElementById('server-status-text').textContent = 'Ошибка загрузки';
+      document.getElementById('server-message').textContent = 
+        'Не удалось получить статус сервера. Пожалуйста, обновите страницу.';
+    }
+
+    // Обновляем статус при загрузке страницы и каждые 30 секунд
+    document.addEventListener('DOMContentLoaded', updateServerStatus);
+    setInterval(updateServerStatus, 30000);
+</script>
 </body>
 </html>
