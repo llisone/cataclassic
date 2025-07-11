@@ -308,15 +308,25 @@
   <script>
     // Функция для обновления статуса сервера
     async function updateServerStatus() {
-  try {
-    const response = await fetch('server-status.json?t=' + Date.now());
-    const data = await response.json();
-    updateUI(data);
-  } catch (error) {
-    console.error('Ошибка:', error);
-    showError();
-  }
-}
+      try {
+        // Добавляем timestamp чтобы избежать кеширования
+        const response = await fetch('api/server-status.php?t=' + Date.now());
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        console.log('Данные от сервера:', data); // Для отладки
+
+        // Обновляем элементы интерфейса
+        updateUI(data);
+        
+      } catch (error) {
+        console.error('Ошибка при обновлении статуса:', error);
+        showError();
+      }
+    }
 
     function updateUI(data) {
       const statusElement = document.querySelector('.server-status');
